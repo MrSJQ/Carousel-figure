@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>移动端PC端兼容轮播图</title>
+		<meta name=”viewport” content=”width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;” />
+		<link href="css/Carousel.css" rel="stylesheet"> 
+		<script type="text/javascript" src="js/jquery-1.7.1.min.js"></script>
+		<script type="text/javascript" src="js/jquery.event.drag-1.5.min.js"></script>
+		<script type="text/javascript" src="js/jquery.touchSlider.js"></script>
+	</head>
+	<body>
+		<div class="box">
+			<!--
+            	作者：326336467@qq.com
+            	时间：2017-03-31
+            	描述：轮播图主体
+            -->
+			<div class="Carousel_figur" id="Carousel_figur">
+                <div class="flicking_con">
+                	<a href="#"></a>
+                	<a href="#"></a>
+                	<a href="#"></a>
+                	<a href="#"></a>
+                </div>
+                <div class="main_image">
+	                <ul class="Carousel-image">
+	                	<li class="image-first active">
+	                		<img src="image/all.jpg" alt=""> 
+	                	</li>
+	                	<li class="image-second">
+	                		<img src="image/aisi.jpg" alt=""> 
+	                	</li>
+	                	<li class="image-third">
+	                		<img src="image/namei.jpg" alt=""> 
+	                	</li>
+	                	<li class="image-fouth">
+	                		<img src="image/suolong.jpg" alt=""> 
+	                	</li>
+	                </ul>
+                	<a href="javascript:;" id="btn_prev">
+                		<!--<img src="image/hover_left.png" alt="">--> 
+                	</a>
+					<a href="javascript:;" id="btn_next">
+						<!--<img src="image/hover_right.png" alt="">--> 
+					</a>
+                </div>
+			</div>
+		</div>
+		<script>
+			$(document).ready(function(){
+				//触动屏幕显示左右组件----PC端
+				$(".Carousel_figur").hover(function(){
+					$("#btn_prev,#btn_next").fadeIn()
+				},function(){
+					$("#btn_prev,#btn_next").fadeOut()
+				});
+				
+				$dragBln = false;
+				
+				$(".main_image").touchSlider({
+					flexible : true,
+					//控制从前一副图滑动到后一副图的滑动时间
+					speed : 500,
+					btn_prev : $("#btn_prev"),
+					btn_next : $("#btn_next"),
+					paging : $(".flicking_con a"),
+					counter : function(e){
+						$(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
+					}
+				});
+				
+				$(".main_image").bind("mousedown",function(){
+					$dragBln = false;
+				});
+				$(".main_image").bind("dragstart",function(){
+					$dragBln = true;
+				});
+				$(".main_image a").click(function(){
+					if($dragBln){
+						return false;
+					}
+				});
+				//控制自动轮播切换图片的时间
+				timer = setInterval(function(){
+					$("#btn_next").click();
+				},5000);
+				
+				$(".Carousel_figur").hover(function(){
+					clearInterval(timer)
+				},function(){
+					timer = setInterval(function(){
+						$("#btn_next").click();
+					},5000)
+				});
+				
+				$(".main_image").bind("touchstart",function(){
+					clearInterval(timer);
+				}).bind("touchend",function(){
+					timer = setInterval(function(){
+						$("#btn_next").click();
+					},5000)
+				});
+			});
+		</script>
+	</body>
+</html>
